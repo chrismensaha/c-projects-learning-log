@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include "calculator.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "calculator.h"
-
 /**
  * @brief Adds two double-precision numbers.
  * @return The sum of addend_a and addend_b.
