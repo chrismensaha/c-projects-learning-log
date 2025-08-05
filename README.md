@@ -6,7 +6,7 @@ The projects were made to practice/solidify core programming concepts such as ar
 ## Projects
 
 - 'dynamic-calculator.c' – Performs basic arithmetic operations (add, subtract, multiply, divide) with dynamic memory.
-- 
+- 'dynamic-contact-book' - Allows the user to use a functional contact book (add contacts, list contacts, delete contact).
 
 ## Purpose
 
