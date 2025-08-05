@@ -13,69 +13,77 @@ Delete a contact
 Free all memory before exiting */
 
 int main(){
-    int mode=0, input_number=0, size=100, contactsize=0, start_index=0, delete_num=0;
-    int c;
+    int mode=0, input_number=0, size=100, contactsize=0, delete_num=0;
+    int c, exit;
     Contact *contact;
     
     contact=calloc(1,sizeof(Contact));
 
     while (1){
-    printf("Press [1] to Add\n[2] to List all contacts\n[3] to Delete a contact : ");
-    scanf("%d",&mode);
-    switch (mode)
-    {
-    case 1:
-        printf("How much do you want to add?");        
-        scanf("%d",&input_number);
-        contactsize+=input_number;
-        Contact *temp=realloc(contact,(input_number+1)*sizeof(Contact));
-        contact=temp;
-        
-        while ((c = getchar()) != '\n' && c != EOF);  
-        for(int i=start_index; i<input_number;i++){
-            contact[i].name=malloc(size*sizeof(char));
-            contact[i].number=malloc(size*sizeof(char));
-            printf("Enter name: ");
-                  
-            fgets(contact[i].name,size,stdin);  
-            contact[i].name[strcspn(contact[i].name, "\n")] = '\0';        
-            printf("Enter number: ");        
-            fgets(contact[i].number,size,stdin);            
-            contact[i].number[strcspn(contact[i].number, "\n")] = '\0';
+        printf("Press [1] to Add a contact, [2] to List all contacts, or [3] to Delete a contact: ");
+        scanf("%d",&mode);
+        switch (mode)
+        {
+        case 1:
+            printf("# of contacts to add: ");        
+            scanf("%d",&input_number);
+            if (sizeof(input_number)<sizeof(int) || input_number<0){
+                printf("INVALID INPUT! Try Again\n"); break;}
+            else {                
+                Contact *temp=realloc(contact,(contactsize)*sizeof(Contact));
+                if (!temp) {
+                    printf("Error! Memory allocation failed\n");
+                    break;
+                    }
+                contact=temp;
+                int start_index = contactsize;
+                contactsize+=input_number;
+                while ((c = getchar()) != '\n' && c != EOF);  
+                for(int i=start_index; i<input_number;i++){
+                    contact[i].name=malloc(size*sizeof(char));
+                    contact[i].number=malloc(size*sizeof(char));
+                    printf("Enter name: ");             
+                    fgets(contact[i].name,size,stdin);  
+                    contact[i].name[strcspn(contact[i].name, "\n")] = '\0';  
 
-            printf("Name: %s  |  Number: %s\n", contact[i].name, contact[i].number);
+                    printf("Enter number: ");        
+                    fgets(contact[i].number,size,stdin);            
+                    contact[i].number[strcspn(contact[i].number, "\n")] = '\0';
+
+                    printf("You have entered: {%s, %s}\n", contact[i].name, contact[i].number);              
+                    printf("Press [1] to continue | Press [0] to exit: ");
+                    scanf("%d",&exit);
+
+                    if (exit==0){ free(contact); return 0;}
+                    else continue;
+                    }
+                }        
             
-    }        break;        
-    case 2:
-            if (contactsize!=0){ 
-                for(int i=0;i<contactsize;i++){ 
-                    printf("Name [%d]: %s  |  Number: %s\n",i, contact[i].name, contact[i].number);  }
+        
+        break;        
+        case 2:
+                if (contactsize==0){ printf("Empty contactbook! Please add a contact first\n"); break;}
+                else{ 
+                    for(int i=0;i<contactsize;i++){ 
+                        printf("Name: %s  |  Number: %s\n", contact[i].name, contact[i].number);}                                                                            
+                    } break;
+        case 3:
+                if (contactsize!=0){
+                    printf("How many contacts do you want to delete? ");
+                    scanf("%d",&delete_num); 
+                    for (int i=0; i<delete_num;i++){
+                        free(contact[i].name);
+                        free(contact[i].number);
+                    }
                 }
-            else{ 
+                else{ 
                     printf("Error! Add a contact first\n");                                     
-            } break;
-    case 3:
-            printf("How many contacts do you want to delete? ");
-            scanf("%d",&delete_num);
-            if (contactsize!=0){ 
-                for (int i=0; i<delete_num;i++){
-                    free(contact[i].name);
-                    free(contact[i].number);
-                }
-            }
-            else{ 
-                printf("Error! Add a contact first\n");                                     
-            } 
-                contactsize -=delete_num;
-                temp=realloc(contact, (delete_num)*sizeof(Contact));
-                contact = temp;
-
-
+                } 
+                break;
+        default:
             break;
-    default:
-        break;
-    }
-    }
+        }
+        }
     free(contact);
     return 0;
 }
