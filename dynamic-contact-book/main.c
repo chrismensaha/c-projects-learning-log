@@ -75,20 +75,29 @@ int main(){
                     } break;
         case 3:
                 if (contactsize!=0){
-                    printf("How many contacts do you want to delete? ");
-                    scanf("%d",&delete_num); 
-                    if (delete_num > contactsize) {
-                        printf("Deletion request too large!\n");
-                        break;
+                    int del_index;
+                    printf("Enter the index you would like to delete: ");
+                    scanf("%d",&del_index); 
+                    if (del_index < 0 || del_index >= contactsize) {
+                        printf("Invalid Input!\n");
+                        break;}
+                        free(contact[del_index].name);
+                        free(contact[del_index].number);
+                    
+                        for (int i=del_index; i<contactsize-1;i++){
+                            contact[i]=contact[i+1];
                             }
-                    else{
-                        for (int i=0; i<delete_num;i++){
-                            free(contact[i].name);
-                            free(contact[i].number);
-                            realloc(contact, contactsize * sizeof(Contact));
-                    }
-                }
-            }
+                        
+                        contactsize--;
+
+                        Contact *temp2 = realloc(contact, contactsize * sizeof(Contact));
+                        if (!temp2 | contactsize==0) {
+                            printf("Error! Memory allocation failed\n");
+                            contact=temp2;
+                            }
+                        printf("Contact deleted.\n");
+                        }
+
                 else{ 
                     printf("Error! Add a contact first\n");                                     
                 } 
