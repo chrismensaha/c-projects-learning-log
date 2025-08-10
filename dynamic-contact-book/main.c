@@ -69,53 +69,64 @@ int main(){
                 }        
         
         break;        
-        case 2: 
+        case 2: // List all contacts
                 if (contactsize==0){ printf("Empty contactbook! Please add a contact first\n"); break;}
                 else{ 
                     for(int i=0;i<contactsize;i++){ 
                         printf("Index [%d] | {%s, %s}\n",i, contact[i].name, contact[i].number);}                                                                            
                     } break;
-        case 3:
+        case 3: // Delete a contact
                 if (contactsize!=0){
                     int del_index;
                     printf("Enter the index you would like to delete: ");
                     scanf("%d",&del_index); 
+
+                    // Validate index
                     if (del_index < 0 || del_index >= contactsize) {
                         printf("Invalid Input!\n");
                         break;}
-                        free(contact[del_index].name);
-                        free(contact[del_index].number);
-                    
-                        for (int i=del_index; i<contactsize-1;i++){
-                            contact[i]=contact[i+1];
-                            }
-                        
-                        contactsize--;
 
-                        Contact *temp2 = realloc(contact, contactsize * sizeof(Contact));
-                        if (!temp2 | contactsize==0) {
-                            printf("Error! Memory allocation failed\n");
-                            contact=temp2;
-                            }
-                        printf("Contact deleted.\n");
+                    // Free memory of the deleted contact
+                    free(contact[del_index].name);
+                    free(contact[del_index].number);
+                    
+                    // Shift remaining contacts down by one
+                    for (int i=del_index; i<contactsize-1;i++){
+                        contact[i]=contact[i+1];
+                    }
+                        
+                    contactsize--;
+
+                    Contact *temp2 = realloc(contact, contactsize * sizeof(Contact));
+                    if (!temp2 | contactsize==0) {
+                        printf("Error! Memory allocation failed\n");
+                        contact=temp2;
                         }
 
-                else{ 
+                    printf("Contact deleted.\n");
+                    
+
+                    } else { 
                     printf("Error! Add a contact first\n");                                     
                 } 
                 break;
         default:
             break;
         }
+
+        // Ask if the user wants to continue or exit
         printf("Press [1] to continue | Press [0] to exit: ");
         scanf("%d",&user_exit);
+
         if (user_exit==0){ 
+            // Free all allocated memory before exit
             for(int i=0;i<contactsize;i++){
                 free(contact[i].name);
                 free(contact[i].number);}
         break;}
         else continue;
         }
+    // Free main array
     free(contact);
     return 0;
 }
